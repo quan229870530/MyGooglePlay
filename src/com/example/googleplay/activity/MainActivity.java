@@ -5,6 +5,11 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -13,13 +18,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.example.googleplay.R;
 import com.example.googleplay.base.BaseActivity;
+import com.example.googleplay.fragment.Fragment1;
 import com.example.googleplay.view.MyButton;
 
 
@@ -30,23 +35,19 @@ public class MainActivity extends BaseActivity {
 	private ActionBarDrawerToggle mDrawerToggle; // 抽屉开关
 	private FrameLayout fl_left;
 	private List<View> list;
-	// private ViewPager mViewPager;
-	// private PagerSlidingTabStrip mTabStrip;
+	private ViewPager mViewPager;
+	private PagerSlidingTabStrip mTabStrip;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		fl_left = (FrameLayout) findViewById(R.id.fl_left);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		// mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
-		// mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.main_tabs);
-		
+		findView();
 		// 初始化数据
 		 initData();
 		// 初始化actionbar
-		initActionBar();
+		initView();
 	}
 
 	private void initData() {
@@ -69,6 +70,25 @@ public class MainActivity extends BaseActivity {
 		list.add(tv3);
 		list.add(tv2);
 		list.add(tv1);
+	}
+	
+	private void initView() {
+		// TODO Auto-generated method stub
+		initActionBar();
+		initContent();
+	}
+	private void initContent() {
+		// TODO Auto-generated method stub
+		mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+		mTabStrip.setViewPager(mViewPager);
+	}
+	
+	private void findView() {
+		// TODO Auto-generated method stub
+		mViewPager = (ViewPager) findViewById(R.id.view_pager);
+		mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding);
+		fl_left = (FrameLayout) findViewById(R.id.fl_left);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	}
 	
 	private void initActionBar() {
@@ -122,6 +142,71 @@ public class MainActivity extends BaseActivity {
 		}return super.onOptionsItemSelected(item);
 	}
 	
+	class MyPagerAdapter extends FragmentPagerAdapter  {
+		
+		String[] title = { "项目一", "项目二", "项目三", "项目四" };
+		Fragment1 fragment1;
+		Fragment1 fragment2;
+		Fragment1 fragment3;
+		Fragment1 fragment4;
+		public MyPagerAdapter(FragmentManager fm) {
+			super(fm);
+			// TODO Auto-generated constructor stub
+		}
+
+		/*@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			// TODO Auto-generated method stub
+			container.removeView(list.get(position));
+		}
+		
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			// TODO Auto-generated method stub
+			container.addView(list.get(position));
+			return list.get(position);
+		}
+		
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			// TODO Auto-generated method stub
+			return arg0 == arg1;
+		}*/
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return title[position];
+		}
+		
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return 4;
+		}
+
+		@Override
+		public Fragment getItem(int arg0) {
+			// TODO Auto-generated method stub
+			switch (arg0) {
+			case 0:
+				fragment1 = new Fragment1();
+				return fragment1;
+			case 1:
+				fragment1 = new Fragment1();
+				return fragment1;
+			case 2:
+				fragment1 = new Fragment1();
+				return fragment1;
+			case 3:
+				fragment1 = new Fragment1();
+				return fragment1;
+			default:
+				break;
+			}
+			return null;
+		}
+	}
+	
 	class MyAdapter extends BaseAdapter{
 
 		List<View> list;
@@ -129,6 +214,8 @@ public class MainActivity extends BaseActivity {
 			// TODO Auto-generated constructor stub
 			this.list = list;
 		}
+		
+		
 		
 		@Override
 		public int getCount() {
